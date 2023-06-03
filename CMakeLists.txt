@@ -1,7 +1,22 @@
 cmake_minimum_required(VERSION 3.0)
 
 # 项目名称
-project(logger)
+project(my_logger)
+
+# 自定义编译选项
+option(ENABLE_DEBUG "Compile with debug information" OFF)
+option(ENABLE_RELEASE "Compile without debug information" OFF)
+option(GENERATE_COMPILE_COMMANDS "Generate compile_commands.json" OFF)
+
+if(ENABLE_DEBUG)
+    set(CMAKE_BUILD_TYPE Debug)
+elseif(ENABLE_RELEASE)
+    set(CMAKE_BUILD_TYPE Release)
+endif()
+
+if(GENERATE_COMPILE_COMMANDS)
+    set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+endif()
 
 # 添加 include 目录
 include_directories(include)
