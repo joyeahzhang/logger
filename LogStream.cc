@@ -201,10 +201,10 @@ LogStream& LogStream::operator<<(std::string_view sv)
 
 LogStream& LogStream::operator<<(const FixedBuffer<DEFAULT_LOGSTREAM_BUFFER_SIZE>& buffer)
 {
-    return *this<<buffer.ToString();
+    return *this<<buffer.ToStringView();
 }
 
 std::string_view LogStream::ToStringView() const
 {
-    return buffer_->ToString();
+    return buffer_->ToStringView();
 }

@@ -35,22 +35,24 @@ public:
 
     size_t Append(const std::string_view data);
 
-    inline char* Data()const { return data_.data();}
-
-    inline size_t Size()const { return cur_; } 
-
-    inline size_t Avail()const { return data_.size() - cur_; }
-
-    inline void Clear(){ cur_ = 0; }
+    inline char* Data() const noexcept { return data_.data();}
     
-    void Bzero(){ data_.fill(0); }
+    inline size_t Capactiy() const noexcept { return data_.size(); }
 
-    inline std::string_view ToString() const { return std::string_view(data_.data(), Size()); }
+    inline size_t Size() const noexcept { return cur_; } 
+
+    inline size_t Avail() const noexcept { return data_.size() - cur_; }
+
+    inline void Clear() noexcept { cur_ = 0; }
+    
+    void Bzero() { cur_ = 0, data_.fill(0); }
+
+    inline std::string_view ToStringView() const { return std::string_view(data_.data(), Size()); }
 
 private:
-    // 缓存区
+    // 缓冲区
     std::array<char, SIZE> data_;
-    // 当前缓存区首个元素的位置
+    // 下一个即将加入缓冲区的元素的索引
     std::size_t cur_; 
 };
 

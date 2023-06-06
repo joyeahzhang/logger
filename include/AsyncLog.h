@@ -10,6 +10,7 @@ namespace doggy
 
 class AsyncLogImpl;
 
+// AsyncLog类的功能是接收日志输入, 在后台线程中将日志输出到文件中
 class AsyncLog final
 {
 public:
@@ -21,8 +22,6 @@ public:
     // 不允许拷贝
     AsyncLog(const AsyncLog&) = delete;
     AsyncLog& operator=(const AsyncLog&) = delete;
-    AsyncLog(AsyncLog&&) = default;
-    AsyncLog& operator=(AsyncLog&&) = default;
 
     void Append(const std::string_view logline);
     void Stop();

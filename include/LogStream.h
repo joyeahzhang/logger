@@ -2,7 +2,6 @@
 #define _LOGSTREAM_
 
 #include <memory>
-#include <ostream>
 #include <string_view>
 
 namespace doggy {
@@ -12,7 +11,16 @@ class FixedBuffer;
 
 inline constexpr size_t DEFAULT_LOGSTREAM_BUFFER_SIZE = 1024;
 
-class LogStream final //不可继承 && 不可拷贝
+// LogStream类负责接收日志流, 它的设计参考了std::ostream, 表现在：
+//  1. 它对各种类型的数据类型重载了“<<运算符”
+//  2. 它拥有一个缓冲区, 用于接收“<<运算符”输入的数据
+
+// 不过LogStream类没有负责将缓冲区内容输出到目的地的成员函数, 而仅有
+// 一个ToStreamView函数负责以string_view的格式读出缓冲区中的数据。
+// 因为LogStream类一定是由Logger类所持有的, 所以在设计中我将输出缓冲区中
+// 内容到目的地的任务放到了Logger类中。
+
+class LogStream final
 {    
 public:
     LogStream();

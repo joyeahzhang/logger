@@ -1,5 +1,6 @@
 #include "include/Logger.h"
 #include "include/LogStream.h"
+
 #include <cstdio>
 #include <iostream>
 #include <memory>
@@ -45,7 +46,8 @@ void DefaultFlush()
 Logger::OutputFunc Logger::output_func_= DefaultOutput;
 Logger::FlushFunc Logger::flush_func_ = DefaultFlush;
 LogLevel Logger::output_level_ = LogLevel::TRACE;
-}
+
+} // end namespace doggy
 
 using namespace doggy;
 

@@ -57,10 +57,9 @@ private:
     void DoBackgroundWork();
 };
 
-}
+} // end namespace doggy
 
 using namespace doggy;
-
 
 AsyncLog::AsyncLog(const std::filesystem::path& dir_path, int flush_interval_s)
     : impl_(std::make_unique<AsyncLogImpl>(dir_path, flush_interval_s))
@@ -113,7 +112,7 @@ void AsyncLog::Append(const std::string_view logline)
 void AsyncLogImpl::DoBackgroundWork()
 {
     // 设置后台线程名字, 方便分线程观测程序的运行情况
-    prctl(PR_SET_NAME, "DoBackgroundWork", 0, 0, 0);
+    prctl(PR_SET_NAME, "AsyncLog", 0, 0, 0);
     
     BufferPtr buf_1 = std::make_unique<Buffer>();
     BufferPtr buf_2 = std::make_unique<Buffer>();
@@ -161,7 +160,7 @@ void AsyncLogImpl::DoBackgroundWork()
         // 输出日志到文件
         for(const auto& buffer : buffers_to_write)
         {
-            output->Append(buffer->ToString());
+            output->Append(buffer->ToStringView());
         }
         if(buffers_to_write.size() > 2)
         {
@@ -182,7 +181,7 @@ void AsyncLogImpl::DoBackgroundWork()
     // 在DoBackgroundWork结束时, 冲洗掉前台线程缓存在的日志
     for(const auto& buffer : buffers_)
     {
-        LogFile::Create(dir_path_,false)->Append(buffer->ToString());
+        LogFile::Create(dir_path_,false)->Append(buffer->ToStringView());
     }
     LogFile::Create(dir_path_,false)->Flush();
 }

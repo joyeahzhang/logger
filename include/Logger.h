@@ -4,13 +4,11 @@
 #include <functional>
 #include <memory>
 #include <string_view>
-#include <LogStream.h>
 
 
 namespace doggy {
 
 class LoggerImpl;
-class SourceFile;
 class LogStream;
 
 enum class LogLevel
@@ -24,6 +22,8 @@ enum class LogLevel
     NUM_LOG_LEVELS,
 };
 
+// SourceFile类负责将__FILE__宏转换成“仅包含文件名”的string_view
+// SourceFile类不持有任何资源, 它必须在__FILE__有效时使用
 class SourceFile
 {
 public:
@@ -62,8 +62,8 @@ public:
 
     LogStream& Stream() const; 
 
-    typedef std::function<void(std::string_view)> OutputFunc;
-    typedef std::function<void()> FlushFunc ;
+    using OutputFunc = std::function<void(std::string_view)>;
+    using FlushFunc = std::function<void()>  ;
     
     static void SetOutputLogLevel(LogLevel level);
     static void SetOutput(const OutputFunc&);
